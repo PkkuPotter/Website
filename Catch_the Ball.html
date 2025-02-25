@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Ball Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #gameContainer {
+            width: 500px;
+            height: 400px;
+            background-color: #333;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #player {
+            width: 60px;
+            height: 20px;
+            background-color: #00ff00;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #ball {
+            width: 20px;
+            height: 20px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="player"></div>
+        <div id="ball"></div>
+        <div id="score">Score: 0</div>
+    </div>
+
+    <script>
+        let player = document.getElementById("player");
+        let ball = document.getElementById("ball");
+        let scoreDisplay = document.getElementById("score");
+        let score = 0;
+        let ballSpeed = 3;
+        let playerSpeed = 15;
+
+        let gameContainer = document.getElementById("gameContainer");
+        let containerWidth = gameContainer.offsetWidth;
+        let containerHeight = gameContainer.offsetHeight;
+
+        let playerPosition = {
+            x: (containerWidth - player.offsetWidth) / 2,
+            y: containerHeight - player.offsetHeight - 10,
+        };
+
+        player.style.left = playerPosition.x + "px";
+        player.style.bottom = "10px";
+
+        let ballPosition = {
+            x: Math.random() * (containerWidth - ball.offsetWidth),
+            y: 0,
+        };
+
+        ball.style.left = ballPosition.x + "px";
+        ball.style.top = ballPosition.y + "px";
+
+        function movePlayer(event) {
+            if (event.key === "ArrowLeft" && playerPosition.x > 0) {
+                playerPosition.x -= playerSpeed;
+            } else if (event.key === "ArrowRight" && playerPosition.x < containerWidth - player.offsetWidth) {
+                playerPosition.x += playerSpeed;
+            }
+            player.style.left = playerPosition.x + "px";
+        }
+
+        function moveBall() {
+            ballPosition.y += ballSpeed;
+            ball.style.top = ballPosition.y + "px";
+
+            if (ballPosition.y >= containerHeight - ball.offsetHeight - 10 && ballPosition.x >= playerPosition.x && ballPosition.x <= playerPosition.x + player.offsetWidth) {
+                // Ball caught by player
+                score++;
+                scoreDisplay.textContent = "Score: " + score;
+                resetBall();
+            } else if (ballPosition.y >= containerHeight) {
+                // Ball missed
+                resetBall();
+            }
+        }
+
+        function resetBall() {
+            ballPosition.y = 0;
+            ballPosition.x = Math.random() * (containerWidth - ball.offsetWidth);
+            ball.style.left = ballPosition.x + "px";
+            ball.style.top = ballPosition.y + "px";
+        }
+
+        document.addEventListener("keydown", movePlayer);
+
+        function gameLoop() {
+            moveBall();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>

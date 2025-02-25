@@ -1,0 +1,75 @@
+
+
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Guess the Number Game</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            text-align: center;  
+            margin-top: 50px;  
+            transition: background-color 0.5s;  
+        }  
+        #result {  
+            margin-top: 20px;  
+            font-size: 20px;  
+        }  
+        .celebration {  
+            background-color: #FFD700; /* Gold color for celebration */  
+        }  
+    </style>  
+</head>  
+<body>  
+
+<h1>Guess the Number Game!</h1>  
+<p>I'm thinking of a number between 1 and 100.</p>  
+
+<input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100">  
+<button id="submitGuess">Submit Guess</button>  
+<button id="resetGame">Reset Game</button>  
+
+<div id="result"></div>  
+
+<script>  
+    let randomNumber = Math.floor(Math.random() * 100) + 1;  
+    let attempts = 0;  
+    let correctGuesses = 0;  
+
+    document.getElementById('submitGuess').onclick = function() {  
+        const userGuess = Number(document.getElementById('guessInput').value);  
+        attempts++;  
+        
+        if (userGuess === randomNumber) {  
+            correctGuesses++;  
+            document.getElementById('result').innerHTML = `Congratulations! You've guessed the number ${randomNumber} in ${attempts} attempts!`;  
+            
+            // Check if user has guessed correctly more than 5 times  
+            if (correctGuesses > 5) {  
+                document.body.classList.add('celebration');  
+                document.getElementById('result').innerHTML += '<br>🎉 Amazing! You are on fire! 🎉';  
+            }  
+        } else if (userGuess < randomNumber) {  
+            document.getElementById('result').innerHTML = 'Too low! Try again.';  
+        } else if (userGuess > randomNumber) {  
+            document.getElementById('result').innerHTML = 'Too high! Try again.';  
+        } else {  
+            document.getElementById('result').innerHTML = 'Please enter a valid number!';  
+        }  
+    };  
+
+    document.getElementById('resetGame').onclick = function() {  
+        randomNumber = Math.floor(Math.random() * 100) + 1;  
+        attempts = 0;  
+        document.getElementById('result').innerHTML = '';  
+        document.getElementById('guessInput').value = '';  
+        correctGuesses = 0;  
+        document.body.classList.remove('celebration'); // Reset background color  
+    };  
+
+</script>  
+
+</body>  
+</html>

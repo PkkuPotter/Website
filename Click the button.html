@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click the Button Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #game-container {
+            margin-top: 20px;
+        }
+        #clickButton {
+            padding: 20px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #clickButton:active {
+            background-color: #45a049;
+        }
+        #timer, #score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Click the Button Game!</h1>
+    <p>Click the button as many times as you can before the time runs out.</p>
+    
+    <div id="game-container">
+        <button id="clickButton">Click Me!</button>
+        <p id="timer">Time Left: 10</p>
+        <p id="score">Score: 0</p>
+    </div>
+    
+    <script>
+        let timeLeft = 10; // Total game time in seconds
+        let score = 0;
+        let gameInterval;
+        
+        const clickButton = document.getElementById("clickButton");
+        const timerDisplay = document.getElementById("timer");
+        const scoreDisplay = document.getElementById("score");
+
+        // Start the game
+        function startGame() {
+            gameInterval = setInterval(function() {
+                timeLeft--;
+                timerDisplay.textContent = `Time Left: ${timeLeft}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(gameInterval);
+                    clickButton.disabled = true;
+                    alert(`Game Over! Your final score is: ${score}`);
+                }
+            }, 1000);
+        }
+
+        // When the button is clicked, increase the score
+        clickButton.addEventListener("click", function() {
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+        });
+
+        // Initialize the game when the page loads
+        window.onload = function() {
+            startGame();
+        }
+    </script>
+
+</body>
+</html>
